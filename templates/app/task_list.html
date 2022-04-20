@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>TODO List
+        <a class="btn btn-primary" role="button" style="float: right" href="{% url "todo_list_app:task_create" %}">Add new task</a>
+    </h1>
+
+    {% if tasks %}
+        <ul>
+            {% for task in tasks %}
+                <li>{{ task.content }}</li>
+                <li>{{ task.created_at }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks</p>
+    {% endif %}
+{% endblock %}

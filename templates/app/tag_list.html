@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Tags
+        <a class="btn btn-primary" role="button" style="float: right" href="{% url "todo_list_app:tags_create" %}">Add new tag</a>
+    </h1>
+    {% if tags %}
+        <ul>
+            {% for tag in tags %}
+                <li>
+                    {{ tag.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tags</p>
+    {% endif %}
+{% endblock %}
