@@ -2,21 +2,21 @@ from django.db import models
 
 
 class Task(models.Model):
-    content = models.TextField()
+    content = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     deadline = models.DateTimeField(null=True, blank=True)
     is_done = models.BooleanField(default=False)
-    tag = models.ManyToManyField('Tag')
+    tag = models.ManyToManyField("Tag", name="tags")
 
     class Meta:
-        ordering = ['-is_done', '-created_at']
+        ordering = ["is_done", "-created_at"]
 
     def __str__(self):
-        return self.content
+        return f"{self.content}"
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"

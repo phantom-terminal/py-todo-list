@@ -2,16 +2,44 @@
 
 {% block content %}
     <h1>TODO List
-        <a class="btn btn-primary" role="button" style="float: right" href="{% url "todo_list_app:task_create" %}">Add new task</a>
+        <a class="btn btn-primary" role="button" style="float: right" href="{% url "todo_list_app:task_create" %}">Add task</a>
     </h1>
-
+    <br>
     {% if tasks %}
-        <ul>
-            {% for task in tasks %}
-                <li>{{ task.content }}</li>
-                <li>{{ task.created_at }}</li>
-            {% endfor %}
-        </ul>
+        {% for task in tasks %}
+            <h4><strong>{{ task.content }}</strong></h4>
+            {% if task.is_done %}
+                <p style="color: darkgreen"><strong>Done</strong></p>
+            {% else %}
+                <p style="color: red"><strong>Not done</strong></p>
+            {% endif %}
+
+            {% if task.is_done %}
+                <form action="{% url "todo_list_app:task_status_change" task.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Undo" class="btn btn-secondary" style="float: right">
+                </form>
+            {% else %}
+                <form action="{% url "todo_list_app:task_status_change" task.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Complete" class="btn btn-success" style="float: right">
+                </form>
+            {% endif %}
+
+            <p>Created: {{ task.created_at }}
+                {% if task.deadline %}
+                    <span style="color: firebrick">Deadline: {{ task.deadline }}</span>
+                {% endif %}
+            </p>
+            <p class="text-muted" >Tags:
+                {% for tag in task.tags.all %}
+                    <span class="badge badge-secondary">{{ tag.name }}</span>
+                {% endfor %}
+                <a role="button" href="{% url "todo_list_app:task_update" task.id %}">Update</a>
+                <a role="button" href="{% url "todo_list_app:task_delete" task.id %}">Delete</a>
+            </p>
+            <hr>
+        {% endfor %}
     {% else %}
         <p>No tasks</p>
     {% endif %}
